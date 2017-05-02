@@ -4,10 +4,9 @@ import App from "./App";
 import "./index.css";
 import users from "./users";
 
-
 function render() {
   ReactDOM.render(
-    <App />,
+    <App users={users} />,
     document.getElementById("root")
   );
 }
