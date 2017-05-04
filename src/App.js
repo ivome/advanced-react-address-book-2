@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import UserList from "./components/UserList";
+import SearchBar from "./components/SearchBar";
 import PropTypes from "prop-types";
 
 class App extends Component {
@@ -9,8 +10,22 @@ class App extends Component {
     super(props);
 
     this.state = {
-      selectedUserList: []
-    }
+      selectedUserList: [],
+      searchText: ""
+    };
+  }
+
+  getFilteredUserList() {
+    return this.props.users.filter((user) => {
+      const fullName = `${user.firstName} ${user.lastName}`;
+      return fullName.toLowerCase().indexOf(this.state.searchText.toLowerCase()) !== -1;
+    });
+  }
+
+  handleSearchBarChange(value) {
+    this.setState({
+      searchText: value
+    });
   }
 
   render() {
@@ -26,7 +41,8 @@ class App extends Component {
         <h2>
           Available users
         </h2>
-        <UserList users={this.props.users} onUserSelect={(selectedUser) => {
+        <SearchBar onSearchQueryChange={this.handleSearchBarChange.bind(this)} />
+        <UserList users={this.getFilteredUserList()} onUserSelect={(selectedUser) => {
           console.log("User selected in app", selectedUser);
           this.setState({
             selectedUserList: [
